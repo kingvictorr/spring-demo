@@ -2,23 +2,24 @@ package com.example.demo.models;
 
 import com.example.demo.utils.UserType;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.Date;
 
 /**
  * User DAO
  */
-@Document
+@Document(value = "users")
 public class User {
     @Id
-    @Field("_id")
+    @MongoId(FieldType.OBJECT_ID)
     private String id;
     @Field
-    private String firstName;
-    @Field
-    private String lastName;
+    private String name;
     @Field
     private String email;
     @Field
@@ -28,13 +29,14 @@ public class User {
     @Field
     private Date dateCreated;
 
-    public User(String id, String firstName, String lastName, String email, String phoneNumber, UserType userType) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    @PersistenceConstructor
+    public User(String name, String email, String phoneNumber, UserType userType, Date dateCreated) {
+        super();
+        this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.userType = userType;
+        this.dateCreated = dateCreated;
     }
 
     /**
@@ -54,35 +56,19 @@ public class User {
     }
 
     /**
-     * Get user first name
+     * Get user name
      * @return
      */
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Set user first name
-     * @param firstName
+     * Set user name
+     * @param name
      */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    /**
-     * Getting user last name
-     * @return
-     */
-    public String getLastName() {
-        return lastName;
-    }
-
-    /**
-     * Setting user last name
-     * @param lastName
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -147,5 +133,17 @@ public class User {
      */
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", userType=" + userType +
+                ", dateCreated=" + dateCreated +
+                '}';
     }
 }

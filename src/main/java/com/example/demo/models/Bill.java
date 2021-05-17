@@ -1,35 +1,34 @@
 package com.example.demo.models;
 
+import com.mongodb.lang.Nullable;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.*;
 
 import java.util.List;
 
-@Document
+@Document("bills")
 public class Bill {
     @Id
-    @Field("_id")
+    @MongoId(FieldType.OBJECT_ID)
     private String id;
     @Field
-    private List<Item> items;
+    @DBRef
+    private List<Order> orders;
     @Field
     private Double total;
     @Field
+    @Nullable
+    private Double discountedTotal;
+    @Field
     @DBRef
     private User user;
+    @Field
+    @DBRef
+    private List<Discount> discountList;
 
-    public Bill(List<Item> items, Double total) {
-        this.id = id;
-        this.items = items;
-        this.total = total;
-    }
-
-    public Bill(String id, List<Item> items, Double total) {
-        this.id = id;
-        this.items = items;
-        this.total = total;
+    public Bill(List<Order> orders, User user) {
+        this.orders = orders;
+        this.user = user;
     }
 
     public String getId() {
@@ -38,14 +37,6 @@ public class Bill {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Item> items) {
-        this.items = items;
     }
 
     public Double getTotal() {
@@ -62,5 +53,42 @@ public class Bill {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Nullable
+    public Double getDiscountedTotal() {
+        return discountedTotal;
+    }
+
+    public void setDiscountedTotal(@Nullable Double discountedTotal) {
+        this.discountedTotal = discountedTotal;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public List<Discount> getDiscountList() {
+        return discountList;
+    }
+
+    public void setDiscountList(List<Discount> discountList) {
+        this.discountList = discountList;
+    }
+
+    @Override
+    public String toString() {
+        return "Bill{" +
+                "id='" + id + '\'' +
+                ", orders=" + orders +
+                ", total=" + total +
+                ", discountedTotal=" + discountedTotal +
+                ", user=" + user +
+                ", discountList=" + discountList +
+                '}';
     }
 }
